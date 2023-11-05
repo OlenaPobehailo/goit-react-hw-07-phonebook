@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectContacts, selectFilteredContacts } from 'redux/selectors';
-import { fetchContacts } from 'redux/operations';
+import { deleteContact, fetchContacts } from 'redux/operations';
 import { DeleteButton, ListItem } from './ContactList.styled';
 
 const ContactList = () => {
@@ -10,13 +10,14 @@ const ContactList = () => {
   const contacts = useSelector(selectContacts);
   console.log(filteredContacts);
 
-  // const handleDeleteContact = id => {
-  //   dispatch(deleteContact(id));
-  // };
-
   useEffect(() => {
     dispatch(fetchContacts());
   }, [dispatch]);
+  
+  const handleDeleteContact = id => {
+    dispatch(deleteContact(id));
+  };
+
 
   if (contacts.length === 0) {
     return <p>Loading...</p>;
@@ -32,7 +33,7 @@ const ContactList = () => {
           <DeleteButton
             type="button"
             name="delete"
-            // onClick={() => handleDeleteContact(contact.id)}
+            onClick={() => handleDeleteContact(contact.id)}
           >
             Delete
           </DeleteButton>

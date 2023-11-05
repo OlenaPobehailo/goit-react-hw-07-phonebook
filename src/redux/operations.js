@@ -15,3 +15,15 @@ export const fetchContacts = createAsyncThunk(
   }
 );
 
+export const deleteContact = createAsyncThunk(
+  'contacts/deleteContact',
+  async (id, thunkAPI) => {
+    try {
+      await axios.delete(`/contacts/${id}`);
+      return id;
+    } catch (error) {
+      console.log('Failed to delete contact:', error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
