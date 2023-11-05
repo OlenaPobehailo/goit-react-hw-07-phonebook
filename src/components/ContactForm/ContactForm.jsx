@@ -1,18 +1,18 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { nanoid } from 'nanoid';
-// import { addContact } from 'redux/contactsSlice';
+import { toast } from 'react-toastify';
+import { addContact } from 'redux/operations';
 import { selectContacts } from 'redux/selectors';
 import { Input, Button } from './ContactForm.styled';
-import { toast } from 'react-toastify';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState('');
 
   const contacts = useSelector(selectContacts);
 
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -21,8 +21,8 @@ const ContactForm = () => {
       case 'name':
         setName(value);
         break;
-      case 'number':
-        setNumber(value);
+      case 'phone':
+        setPhone(value);
         break;
       default:
         return;
@@ -41,18 +41,18 @@ const ContactForm = () => {
     } else {
       const newContact = {
         name,
-        number,
+        phone,
         id: nanoid(),
       };
 
-      // dispatch(addContact(newContact));
+      dispatch(addContact(newContact));
       reset();
     }
   };
 
   const reset = () => {
     setName('');
-    setNumber('');
+    setPhone('');
   };
 
   return (
@@ -72,8 +72,8 @@ const ContactForm = () => {
         Number
         <Input
           type="tel"
-          name="number"
-          value={number}
+          name="phone"
+          value={phone}
           onChange={handleInputChange}
           required
         />

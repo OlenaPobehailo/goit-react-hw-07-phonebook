@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { deleteContact, fetchContacts } from './operations';
+import { addContact, deleteContact, fetchContacts } from './operations';
 
 const initialState = {
   contacts: [],
@@ -12,9 +12,9 @@ const handlePending = state => {
   state.error = null;
 };
 
-const handleRejected = (state, action) => {
+const handleRejected = (state, { payload }) => {
   state.loading = false;
-  state.error = action.payload;
+  state.error = payload;
 };
 
 export const contactsSlice = createSlice({
@@ -25,25 +25,36 @@ export const contactsSlice = createSlice({
     builder
       .addCase(fetchContacts.pending, state => handlePending(state))
 
-      .addCase(fetchContacts.fulfilled, (state, action) => {
+      .addCase(fetchContacts.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.error = null;
-        state.contacts = action.payload.sort((a, b) =>
-          a.name.localeCompare(b.name)
-        );
+        state.contacts = payload.sort((a, b) => a.name.localeCompare(b.name));
       })
-      .addCase(fetchContacts.rejected, (state, action) =>
-        handleRejected(state, action)
+
+      .addCase(fetchContacts.rejected, (state, { payload }) =>
+        handleRejected(state, payload)
       )
 
       .addCase(deleteContact.pending, state => handlePending(state))
-      .addCase(deleteContact.fulfilled, (state, action) => {
+
+      .addCase(deleteContact.fulfilled, (state, { payload }) => {
         state.contacts = state.contacts.filter(
-          contact => contact.id !== action.payload
+          contact => contact.id !== payload
         );
       })
-      .addCase(deleteContact.rejected, (state, action) =>
-        handleRejected(state, action)
+
+      .addCase(deleteContact.rejected, (state, { payload }) =>
+        handleRejected(state, payload)
+      )
+
+      .addCase(addContact.pending, state => handlePending(state))
+
+      .addCase(addContact.fulfilled, (state, { payload }) => {
+        state.contacts.unshift(payload);
+      })
+
+      .addCase(addContact.rejected, (state, { payload }) =>
+        handleRejected(state, payload)
       );
   },
 });
