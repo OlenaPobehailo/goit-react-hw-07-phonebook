@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { nanoid } from 'nanoid';
 import { toast } from 'react-toastify';
 import { addContact } from 'redux/operations';
 import { selectContacts } from 'redux/selectors';
@@ -39,13 +38,7 @@ const ContactForm = () => {
       reset();
       return;
     } else {
-      const newContact = {
-        name,
-        phone,
-        id: nanoid(),
-      };
-
-      dispatch(addContact(newContact));
+      dispatch(addContact({ name, phone }));
       reset();
     }
   };
