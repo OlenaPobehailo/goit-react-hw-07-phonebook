@@ -8,22 +8,18 @@ const ContactList = () => {
   const filteredContacts = useSelector(selectFilteredContacts);
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
-  console.log(filteredContacts);
 
   useEffect(() => {
     dispatch(fetchContacts());
   }, [dispatch]);
-  
+
   const handleDeleteContact = id => {
     dispatch(deleteContact(id));
   };
 
-
   if (contacts.length === 0) {
     return <p>Loading...</p>;
   }
-
-  filteredContacts && console.log(filteredContacts);
 
   return (
     <ul>
